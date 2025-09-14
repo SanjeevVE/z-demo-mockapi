@@ -1,6 +1,7 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import type { PackageData } from './types';
+import { useState, useEffect } from 'react';
 import { Check, Calendar, Phone, X } from 'lucide-react';
 import {
   FaLocationDot,
@@ -21,6 +22,19 @@ export default function HomePage() {
   const [current, setCurrent] = useState(0);
   const [enquiryOpen, setEnquiryOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [data, setData] = useState<PackageData | null>(null);
+
+  // Fetch package data
+  useEffect(() => {
+    fetch('https://68c41ec381ff90c8e61b4cab.mockapi.io/sanjeevdemo/data')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && json.length > 0) {
+          setData(json[0]);
+        }
+      })
+      .catch((err) => console.error('API Fetch Error:', err));
+  }, []);
 
   const nextSlide = () =>
     setCurrent((prev) => (prev === heroImages.length - 1 ? 0 : prev + 1));
@@ -28,62 +42,70 @@ export default function HomePage() {
   const prevSlide = () =>
     setCurrent((prev) => (prev === 0 ? heroImages.length - 1 : prev - 1));
 
+  if (!data) {
+    return (
+      <div className='flex items-center justify-center h-screen text-gray-500'>
+        Loading...
+      </div>
+    );
+  }
+
   return (
     <div className='bg-white text-gray-800 font-sans antialiased'>
       {/* Header */}
       <header className='bg-white border-b border-gray-200'>
-        <div className='max-w-6xl mx-auto px-6 py-4 flex justify-between items-center'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center'>
           <img
             src='/img/zlogo.jpeg'
             alt='Dal lake'
-            className='w-32 h-auto object-contain'
+            className='w-24 sm:w-32 h-auto object-contain'
           />
           <button
             onClick={() => setShareOpen(true)}
-            className='border border-orange-500 text-orange-500 px-6 py-2 rounded-full text-sm font-medium hover:bg-orange-500 hover:text-white transition'
+            className='border border-orange-500 text-orange-500 px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-orange-500 hover:text-white transition'
           >
             Share
           </button>
         </div>
       </header>
 
-      {/* Page Content */}
-      <main className='max-w-6xl mx-auto px-6 py-4'>
+      <main className='max-w-6xl mx-auto px-4 sm:px-6 py-4'>
         {/* Hero Section */}
-        <div className='relative mb-16'>
+        <div className='relative mb-20 sm:mb-16'>
           <div className='relative overflow-hidden rounded-lg shadow-lg'>
             <Image
               src={heroImages[current].src}
               alt={heroImages[current].alt}
               width={1200}
               height={500}
-              className='w-full h-[28rem] object-cover'
+              className='w-full h-64 sm:h-[28rem] object-cover'
             />
-            <div className='absolute top-4 left-4 text-white text-lg font-semibold drop-shadow-lg'>
+
+            <div className='absolute top-3 left-3 sm:top-4 sm:left-4 text-white text-sm sm:text-lg font-semibold drop-shadow-lg'>
               {heroImages[current].alt}
             </div>
 
-            {/* Arrows */}
+            {/* Hero Navigation */}
             <button
               onClick={prevSlide}
-              className='absolute top-1/2 left-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl transition'
+              className='absolute top-1/2 left-2 sm:left-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-lg sm:text-xl transition'
             >
               ‹
             </button>
             <button
               onClick={nextSlide}
-              className='absolute top-1/2 right-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl transition'
+              className='absolute top-1/2 right-2 sm:right-4 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-lg sm:text-xl transition'
             >
               ›
             </button>
 
             {/* Pagination dots */}
-            <div className='absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2'>
+            <div className='absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex space-x-1 sm:space-x-2'>
               {heroImages.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrent(index)}
-                  className={`w-3 h-3 rounded-full transition ${
+                  className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition ${
                     index === current ? 'bg-white' : 'bg-white/50'
                   }`}
                 />
@@ -92,25 +114,49 @@ export default function HomePage() {
           </div>
 
           {/* Package Info Card */}
-          <div className='absolute left-1/2 -translate-x-1/2 -bottom-10 w-[90%] md:w-4/5 bg-white rounded-xl shadow-lg p-5 flex items-center justify-between'>
+          <div className='absolute left-1/2 -translate-x-1/2 -bottom-14 sm:-bottom-10 w-[95%] sm:w-4/5 bg-white rounded-xl shadow-lg p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0'>
             <div>
-              <h1 className='text-lg md:text-xl font-semibold text-gray-900 mb-1'>
+              <h1 className='text-base sm:text-lg md:text-xl font-semibold text-gray-900 mb-1'>
                 Kashmir: Heaven on Earth
               </h1>
-              <p className='text-gray-600 text-xs md:text-sm font-[Times_New_Roman]'>
-                5 Nights 6 Days • Group Tour • 6 Flexible Dates
+              <p className='text-gray-600 text-xs sm:text-sm font-[Times_New_Roman]'>
+                {data.duration ?? (
+                  <span className='text-red-500'>Missing duration</span>
+                )}{' '}
+                •{' '}
+                {data.type ?? (
+                  <span className='text-red-500'>Missing type</span>
+                )}{' '}
+                •{' '}
+                {data.dates?.length ? (
+                  `${data.dates.length} Flexible Dates`
+                ) : (
+                  <span className='text-red-500'>Missing dates</span>
+                )}
               </p>
             </div>
-            <div className='flex items-center space-x-4'>
-              <div>
-                <div className='text-lg md:text-xl font-bold text-gray-900'>
-                  ₹ 68,999 <span className='text-xs font-normal'>only</span>
+
+            <div className='flex items-center sm:space-x-4 w-full sm:w-auto justify-between sm:justify-end'>
+              <div className='text-left sm:text-right'>
+                <div className='text-base sm:text-lg md:text-xl font-bold text-gray-900'>
+                  {data.price?.amount !== undefined ? (
+                    <>
+                      ₹ {data.price.amount}{' '}
+                      <span className='text-xs font-normal'>only</span>
+                    </>
+                  ) : (
+                    <span className='text-red-500'>Missing price</span>
+                  )}
                 </div>
-                <div className='text-[11px] text-gray-500'>Per Person*</div>
+                <div className='text-[10px] sm:text-[11px] text-gray-500'>
+                  {data.price?.note ?? (
+                    <span className='text-red-500'>Missing note</span>
+                  )}
+                </div>
               </div>
               <button
                 onClick={() => setEnquiryOpen(true)}
-                className='flex items-center bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 text-white px-6 py-2 rounded-full text-sm font-medium shadow-md transition'
+                className='flex items-center bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-600 hover:to-yellow-500 text-white px-4 sm:px-6 py-2 rounded-full text-xs sm:text-sm font-medium shadow-md transition ml-3 sm:ml-0'
               >
                 <Phone className='w-4 h-4 mr-2' />
                 Enquiry
@@ -119,64 +165,54 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Departure Details Section */}
+        {/* Departure Details */}
         <div className='grid md:grid-cols-2 gap-8 mb-8'>
-          {/* Departure Dates */}
+          {/* Dates */}
           <div className='flex flex-col'>
-            {/* Header with left gradient line */}
             <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
               <div className='flex flex-col items-start'>
-                {/* Icon box */}
                 <div className='flex items-center justify-center w-8 h-8 rounded bg-orange-100 mb-2'>
                   <Calendar className='w-5 h-5 text-orange-500' />
                 </div>
-                {/* Title */}
                 <h3 className='text-lg font-semibold text-gray-800'>
                   Departure Dates
                 </h3>
               </div>
             </div>
-
-            {/* Dates buttons */}
-            <div className=' px-4 flex flex-wrap gap-3'>
-              {[
-                '05-June-2024',
-                '15-June-2024',
-                '25-June-2024',
-                '30-June-2024',
-                '02-July-2024',
-                '11-July-2024',
-              ].map((date, i) => (
-<button
-  key={i}
-  className='border border-gray-300 bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded text-xs transition'
->
-  {date}
-</button>
-
-              ))}
+            <div className='px-4 flex flex-wrap gap-3'>
+              {data.dates?.length ? (
+                data.dates.map((date, i) => (
+                  <button
+                    key={i}
+                    className='border border-gray-300 bg-gray-100 hover:bg-gray-200 text-gray-800 py-1 px-2 rounded text-xs transition'
+                  >
+                    {date}
+                  </button>
+                ))
+              ) : (
+                <p className='text-sm text-red-500'>
+                  Information not available
+                </p>
+              )}
             </div>
           </div>
 
-          {/* Departure Location */}
+          {/* Location */}
           <div className='flex flex-col'>
-            {/* Header with left gradient line */}
             <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
               <div className='flex flex-col items-start'>
-                {/* Icon box */}
                 <div className='flex items-center justify-center w-8 h-8 rounded bg-orange-100 mb-2'>
                   <FaLocationDot className='w-5 h-5 text-orange-500' />
                 </div>
-                {/* Title */}
                 <h3 className='text-lg font-semibold text-gray-800'>
                   Departure Location
                 </h3>
               </div>
             </div>
-
-            {/* Content */}
             <p className='px-4 text-sm text-gray-700 font-[Times_New_Roman]'>
-              Chennai.
+              {data.departureLocation ?? (
+                <span className='text-red-500'>Information not available</span>
+              )}
             </p>
           </div>
         </div>
@@ -185,151 +221,69 @@ export default function HomePage() {
         <div className='space-y-8'>
           {/* Overview */}
           <div className='flex flex-col'>
-            {/* Header with left gradient line */}
             <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
-              <div className='flex flex-col items-start'>
-                {/* Icon box */}
-
-                {/* Title */}
-                <h3 className='text-lg font-semibold text-gray-800'>
-                  Overview
-                </h3>
-              </div>
+              <h3 className='text-lg font-semibold text-gray-800'>Overview</h3>
             </div>
-
-            {/* Content */}
             <p className='px-4 text-sm text-gray-600 leading-relaxed text-justify font-[Times_New_Roman]'>
-              Kashmir is celebrated for its unparalleled natural beauty, often
-              described as paradise on earth by the famous Mughal emperor
-              Jahangir. The region boasts breathtaking landscapes that blend the
-              charm of snow-capped mountains, blue lakes, and green plains,
-              evoking a sense of romance and fertility. The true essence and
-              beauty of Kashmir can only be fully appreciated through personal
-              experience, inviting readers to explore and feel the enchanting
-              valley for themselves.
+              {data.overview ?? (
+                <span className='text-red-500'>Information not available</span>
+              )}
             </p>
           </div>
 
           {/* Places */}
           <div className='flex flex-col'>
-            {/* Header with left gradient line */}
             <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
-              <div className='flex flex-col items-start'>
-                {/* Icon box */}
-
-                {/* Title */}
-                <h3 className='text-lg font-semibold text-gray-800'>Places</h3>
-              </div>
+              <h3 className='text-lg font-semibold text-gray-800'>Places</h3>
             </div>
-
-            {/* Content */}
-            <p className=' px-4 text-sm text-gray-600 font-[Times_New_Roman]'>
-              Dal Lake - Gulmarg - Pahalgam - Sonamarg - Mughal Gardens -
-              Shankaracharya Temple - Betaab Valley - Amarnath Cave - Jamia
-              Masjid - Dachigam National Park
+            <p className='px-4 text-sm text-gray-600 font-[Times_New_Roman]'>
+              {data.places?.length ? (
+                data.places.join(' - ')
+              ) : (
+                <span className='text-red-500'>Information not available</span>
+              )}
             </p>
           </div>
-          {/* Inclusions and Exclusions */}
+
+          {/* Inclusions & Exclusions */}
           <div className='grid md:grid-cols-2 gap-8'>
-            {/* Inclusions */}
             <div className='flex flex-col'>
-              {/* Header with left gradient line */}
               <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
-                <div className='flex flex-col items-start'>
-                  {/* Icon box */}
-
-                  {/* Title */}
-                  <h3 className='text-lg font-semibold text-gray-800'>
-                    Inclusions
-                  </h3>
-                </div>
+                <h3 className='text-lg font-semibold text-gray-800'>
+                  Inclusions
+                </h3>
               </div>
-
-              {/* List */}
               <ul className='px-4 text-sm text-gray-600 space-y-2 font-[Times_New_Roman]'>
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  To & Fro Airfare from Bengaluru to Srinagar
-                </li>
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Stay at the above mentioned hotel or similar on twin sharing
-                  basis with Extra bed for Child
-                </li>
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Meals: Breakfast & Dinner during the duration of stay
-                </li>
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Transport Services as per the Itinerary by 12 Seater Tempo
-                  Traveller
-                </li>
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Sightseeing Tours as per the itinerary given above
-                </li>
-
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Cable Car - Phase I & II entry tickets
-                </li>
-
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Sjikara ride on Dal Lake for 01 Hour
-                </li>
-
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Vehile for Aru Valley & Betaab Valley in Pahalgam
-                </li>
-
-                <li className='flex items-start'>
-                  <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Meeting & Assistance on arrival by our representative / driver
-                </li>
+                {data.inclusions?.length ? (
+                  data.inclusions.map((item, i) => (
+                    <li key={i} className='flex items-start'>
+                      <Check className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
+                      {item}
+                    </li>
+                  ))
+                ) : (
+                  <li className='text-red-500'>Information not available</li>
+                )}
               </ul>
             </div>
 
-            {/* Exclusions */}
             <div className='flex flex-col'>
-              {/* Header with left gradient line */}
               <div className='flex items-start mb-4 pl-3 border-l-4 border-gradient'>
-                <div className='flex flex-col items-start'>
-                  {/* Icon box */}
-
-                  {/* Title */}
-                  <h3 className='text-lg font-semibold text-gray-800'>
-                    Exclusions
-                  </h3>
-                </div>
+                <h3 className='text-lg font-semibold text-gray-800'>
+                  Exclusions
+                </h3>
               </div>
-
-              {/* List */}
               <ul className='px-4 text-sm text-gray-600 space-y-2 font-[Times_New_Roman]'>
-                <li className='flex items-start'>
-                  <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Camera fee
-                </li>
-                <li className='flex items-start'>
-                  <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Alcoholic / Non- Alcoholic beverages
-                </li>
-                <li className='flex items-start'>
-                  <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Tips, laundry & phone call
-                </li>
-                <li className='flex items-start'>
-                  <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Entrance fees to monuments and museum
-                </li>
-                <li className='flex items-start'>
-                  <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
-                  Expenses caused by factors beyond our control like rail and
-                  flight delays, roadblocks, vehicle mal-functions, political
-                  disturbances etc.
-                </li>
+                {data.exclusions?.length ? (
+                  data.exclusions.map((item, i) => (
+                    <li key={i} className='flex items-start'>
+                      <X className='w-5 h-5 flex-shrink-0 text-orange-500 mr-2 mt-0.5' />
+                      {item}
+                    </li>
+                  ))
+                ) : (
+                  <li className='text-red-500'>Information not available</li>
+                )}
               </ul>
             </div>
           </div>
@@ -360,10 +314,10 @@ export default function HomePage() {
         </div>
       </footer>
 
+      {/* Enquiry Modal */}
       {enquiryOpen && (
         <div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
           <div className='bg-white rounded-xl w-11/12 max-w-4xl p-0 overflow-hidden flex relative'>
-            {/* Left Side Image */}
             <div className='hidden md:block w-1/2 relative'>
               <Image
                 src='/img/EnquiryModal1.jpeg'
@@ -372,8 +326,6 @@ export default function HomePage() {
                 className='object-cover'
               />
             </div>
-
-            {/* Right Side Form */}
             <div className='w-full md:w-1/2 p-5 relative'>
               <button
                 onClick={() => setEnquiryOpen(false)}
@@ -381,7 +333,6 @@ export default function HomePage() {
               >
                 <X className='w-5 h-5' />
               </button>
-              {/* Logo and Text */}
               <div className='flex flex-col items-center text-center mb-4'>
                 <Image
                   src='/img/Zlogo.jpeg'
@@ -390,18 +341,14 @@ export default function HomePage() {
                   height={70}
                   className='mb-2'
                 />
-
                 <b className='text-gray-600 text-lg mb-1'>
                   Eager to <span className='text-orange-500'>discover new</span>{' '}
                   destinations?
                 </b>
-
                 <p className='text-gray-600 text-sm'>
                   Our callback delivers tour details, no spam.
                 </p>
               </div>
-
-              {/* Form Fields */}
               <label className='block mb-1 text-gray-700 text-sm font-medium'>
                 Name
               </label>
@@ -410,16 +357,13 @@ export default function HomePage() {
                 placeholder='Enter your full name'
                 className='w-full border border-gray-300 bg-gray-200 rounded-md p-2 text-sm mb-4'
               />
-
               <label className='block mb-1 text-gray-700 text-sm font-medium'>
                 Departure Date
               </label>
               <input
                 type='date'
-                placeholder='Choose Departure Date'
                 className='w-full border border-gray-300 bg-gray-200 rounded-md p-2 text-sm mb-4'
               />
-
               <label className='block mb-1 text-gray-700 text-sm font-medium'>
                 Phone Number
               </label>
@@ -428,7 +372,6 @@ export default function HomePage() {
                 placeholder='Enter your phone number'
                 className='w-full border border-gray-300 bg-gray-200 rounded-md p-2 text-sm mb-4'
               />
-
               <label className='block mb-1 text-gray-700 text-sm font-medium'>
                 Guest Count
               </label>
@@ -437,7 +380,6 @@ export default function HomePage() {
                 placeholder='Enter Guest count e.g. 5 or 8'
                 className='w-full border border-gray-300 bg-gray-200 rounded-md p-2 text-sm mb-4'
               />
-
               <button className='w-full bg-gradient-to-r from-orange-500 to-yellow-400 text-white p-2 rounded-2xl text-sm'>
                 Get a callback
               </button>
@@ -446,23 +388,19 @@ export default function HomePage() {
         </div>
       )}
 
+      {/* Share Modal */}
       {shareOpen && (
         <div className='fixed inset-0 bg-black/40 flex items-center justify-center z-50'>
           <div className='bg-white rounded-2xl w-96 p-6 relative shadow-lg'>
-            {/* Close Button */}
             <button
               onClick={() => setShareOpen(false)}
               className='absolute top-3 right-3 text-orange-500'
             >
               <X className='w-5 h-5' />
             </button>
-
-            {/* Header */}
             <h2 className='text-lg font-semibold mb-2 text-orange-500 '>
               Share Social
             </h2>
-
-            {/* Copy Link */}
             <h4 className='font-medium mb-2'>Copy link</h4>
             <div className='flex mb-4'>
               <input
@@ -475,25 +413,18 @@ export default function HomePage() {
                 Copy
               </button>
             </div>
-
-            {/* Share Buttons */}
             <h4 className='font-medium mb-2'>Share via</h4>
             <div className='flex space-x-4'>
-              {/* WhatsApp */}
               <div className='p-[2px] rounded-full bg-gradient-to-r from-green-400 to-green-600'>
                 <button className='p-3 bg-white rounded-full text-green-500 hover:bg-green-100 transition'>
                   <FaWhatsapp size={24} />
                 </button>
               </div>
-
-              {/* Instagram */}
               <div className='p-[2px] rounded-full bg-gradient-to-r from-pink-500 to-purple-500'>
                 <button className='p-3 bg-white rounded-full text-pink-500 hover:bg-pink-100 transition'>
                   <FaInstagram size={24} />
                 </button>
               </div>
-
-              {/* Facebook */}
               <div className='p-[2px] rounded-full bg-gradient-to-r from-blue-500 to-blue-700'>
                 <button className='p-3 bg-white rounded-full text-blue-600 hover:bg-blue-100 transition'>
                   <FaFacebook size={24} />
