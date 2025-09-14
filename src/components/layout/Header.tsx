@@ -11,7 +11,7 @@ export const Header = ({ onShareClick }: HeaderProps) => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex justify-between items-center">
         <Image
           src="/img/zlogo.jpeg"
-          alt="Dal lake"
+          alt="zlogo"
           width={128}
           height={64}
           className="w-24 sm:w-32 h-auto object-contain"

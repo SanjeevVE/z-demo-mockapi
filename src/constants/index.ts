@@ -8,10 +8,10 @@ export const API_CONFIG = {
 
 // Hero Images Configuration
 export const HERO_IMAGES = [
-  { src: '/img/Place01.png', alt: 'Dal lake' },
-  { src: '/img/Place02.png', alt: 'Gulmarg' },
-  { src: '/img/Place03.png', alt: 'Shankaracharya Temple' },
-  { src: '/img/Place04.png', alt: 'Jamia Masjid' },
+  { src: '/img/Place01.png', alt: 'Jamia Masjid' },
+  { src: '/img/Place02.png', alt: 'Shankaracharya Temple' },
+  { src: '/img/Place03.png', alt: 'Gulmarg' },
+  { src: '/img/Place04.png', alt: 'Dal lake' },
 ] as const;
 
 // App Configuration
