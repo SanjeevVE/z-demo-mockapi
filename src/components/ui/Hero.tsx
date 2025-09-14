@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import { HERO_IMAGES } from '@/constants';
-import { useCarousel } from '@/hooks/useCarousel';
 
 interface HeroProps {
   currentIndex: number;
