@@ -15,7 +15,6 @@ import { useModal } from '@/hooks/useModal';
 import { useCarousel } from '@/hooks/useCarousel';
 
 import { HERO_IMAGES } from '@/constants';
-import { packageService } from '@/services/api';
 
 export default function HomePage() {
   const { data, loading, error, refetch } = usePackageData();

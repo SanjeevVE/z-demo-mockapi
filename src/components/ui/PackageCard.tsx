@@ -8,8 +8,6 @@ interface PackageCardProps {
 }
 
 export const PackageCard = ({ data, onEnquiryClick }: PackageCardProps) => {
-  const hasValidData = data.duration && data.type && data.dates?.length && data.price?.amount;
-
   return (
     <div className="absolute left-1/2 -translate-x-1/2 -bottom-14 sm:-bottom-10 w-[95%] sm:w-4/5 bg-white rounded-xl shadow-lg p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-4 sm:space-y-0">
       <div>

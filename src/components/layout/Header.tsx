@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import { APP_CONFIG } from '@/constants';
 
 interface HeaderProps {
   onShareClick: () => void;
