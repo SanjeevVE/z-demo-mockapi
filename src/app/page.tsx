@@ -8,6 +8,8 @@ import { InfoSection } from '@/components/ui/InfoSection';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { EnquiryModal, type EnquiryFormData } from '@/components/modals/EnquiryModal';
+import { getStoredUtm } from '@/utils/utm';
+import { sendGAEvent } from '@/components/ui/GA4';
 import { ShareModal } from '@/components/modals/ShareModal';
 
 import { usePackageData } from '@/hooks/usePackageData';
@@ -32,6 +34,12 @@ export default function HomePage() {
       
       // You could show a success message here
       alert('Thank you for your enquiry! We will get back to you soon.');
+
+      // Send GA4 event with stored UTM params if available
+      const utm = getStoredUtm() || undefined;
+      sendGAEvent('enquiry_submit', {
+        ...utm,
+      });
     } catch (error) {
       console.error('Enquiry submission error:', error);
       throw error;

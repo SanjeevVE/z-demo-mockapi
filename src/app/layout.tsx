@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { InitUtmClient } from '@/components/ui/InitUtmClient';
+import { GA4 } from '@/components/ui/GA4';
 
 export const metadata: Metadata = {
   title: 'Kashmir: Heaven on Earth',
@@ -14,6 +16,8 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className='bg-white text-gray-800 font-sans antialiased'>
+        <GA4 />
+        <InitUtmClient />
         {children}
       </body>
     </html>
