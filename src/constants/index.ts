@@ -40,3 +40,12 @@ export const SOCIAL_LINKS = {
   INSTAGRAM: '#',
   FACEBOOK: '#',
 } as const;
+
+// Cache Configuration
+export const CACHE_CONFIG = {
+  PACKAGE_DATA: {
+    key: 'cache_package_data_v1',
+    ttlMs: 5 * 60 * 1000, // 5 minutes
+    storage: 'session' as const,
+  },
+} as const;
