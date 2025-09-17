@@ -2,7 +2,8 @@
 
 import Script from 'next/script';
 
-const MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+// Hardcoded GA4 Measurement ID per user request
+const MEASUREMENT_ID = 'G-EXLN7ZHLT5';
 
 export function GA4() {
   if (!MEASUREMENT_ID) return null;
@@ -31,6 +32,18 @@ export function sendGAEvent(eventName: string, params?: Record<string, unknown>)
   if (typeof window === 'undefined') return;
   // @ts-expect-error - gtag may not be defined yet
   window.gtag?.('event', eventName, params || {});
+}
+
+export function setGAUserProperties(properties: Record<string, unknown>) {
+  if (typeof window === 'undefined') return;
+  // @ts-expect-error - gtag may not be defined yet
+  window.gtag?.('set', 'user_properties', properties);
+}
+
+export function sendPageView(params?: Record<string, unknown>) {
+  if (typeof window === 'undefined') return;
+  // @ts-expect-error - gtag may not be defined yet
+  window.gtag?.('event', 'page_view', params || {});
 }
 
 
